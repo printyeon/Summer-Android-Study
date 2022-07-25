@@ -2,8 +2,10 @@ package com.example.lotteryapp
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 
@@ -50,8 +52,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        findViewById<Button>(R.id.rightButton).setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://www.google.com/search?q=%EB%A1%9C%EB%98%90%EB%B2%88%ED%98%B8&oq=fhEhqjsgh&aqs=chrome.1.69i57j0i131i433i512j0i512l8.2225j0j15&sourceid=chrome&ie=UTF-8&safe=active&ssui=on"))
+            startActivity(intent)
+        }
     }
+
 
     fun generateRandomLottoNum(count:Int, sep:String = "-" ):String{
         var lottoNum = "" //그냥 새로운 문자열 만들기

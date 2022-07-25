@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="30pt"
+        android:text="오늘의 로또 번호"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/num"
+        android:text=""
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/numButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="번호 생성하기"
+        android:textSize="20dp"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="번호 저장하기"
+        android:textSize="20dp"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/checkButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저장된 번호 확인"
+        android:textSize="20dp"
+        android:gravity="center" />
+
+</LinearLayout>

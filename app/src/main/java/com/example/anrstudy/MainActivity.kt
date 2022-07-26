@@ -23,11 +23,12 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.anr).setOnClickListener {
             Thread(Runnable {
+                var sum = 0.0
                 for (i in 1..60) {
-                    Log.d("mytag", sqrt(Random.nextDouble()).toString())
-                    Thread.sleep(1000)
+                    sum += sqrt(Random.nextDouble())
+                    Thread.sleep(100)
                 }
-
+                Log.d("mytag", sum.toString())
 
             }).start()
         }

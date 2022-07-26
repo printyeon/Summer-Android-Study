@@ -10,6 +10,9 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 //ANR => Android Not Responding
+//메인스레드 에서는 짧은 시간에 끝나는 코드나 ui 조작 코드만 쓰고
+//오래걸리는 작업은 스레드를 새로 만들어서 쓰기
+//새로만든 스레드에서 ui작업하는 것은 허용되지 않음
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

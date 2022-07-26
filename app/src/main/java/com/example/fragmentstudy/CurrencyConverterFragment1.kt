@@ -69,8 +69,9 @@ class CurrencyConverterFragment1 : Fragment(){
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
-
         }
+        fromCurrencySpinner.onItemSelectedListener = itemSelectedListener
+        toCurrencySpinner.onItemSelectedListener = itemSelectedListener
         return view
     }
 }

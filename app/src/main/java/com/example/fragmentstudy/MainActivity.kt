@@ -11,7 +11,11 @@ class MainActivity : AppCompatActivity() {
 
         //커밋을 호출되기 전까지 비긴트레지션으로 프레그먼트를 어떻게 하겠다다
        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.fragment_container, CurrencyConverterFragment1())
+        //transaction.add(R.id.fragment_container, CurrencyConverterFragment1())
+        transaction.add(R.id.fragment_container,
+        CurrencyConverterFragment2.newInstance("USD", "KRW"))
+        transaction.add(R.id.fragment_container,
+            CurrencyConverterFragment2.newInstance("KRW", "USD"))
         transaction.commit()
     }
 }

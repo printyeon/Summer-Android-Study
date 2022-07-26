@@ -1,6 +1,8 @@
 package com.example.fragmentstudy
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,6 +74,29 @@ class CurrencyConverterFragment1 : Fragment(){
         }
         fromCurrencySpinner.onItemSelectedListener = itemSelectedListener
         toCurrencySpinner.onItemSelectedListener = itemSelectedListener
+
+        calculateBtn.setOnClickListener{
+            result.text = calculateCurrency(
+                amount.text.toString().toDouble(),
+                fromCurrencySpinner.selectedItem.toString(),
+                toCurrencySpinner.selectedItem.toString()
+            ).toString()
+        }
+
+        amount.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                result.text = calculateCurrency(
+                    amount.text.toString().toDouble(),
+                    fromCurrencySpinner.selectedItem.toString(),
+                    toCurrencySpinner.selectedItem.toString()
+                ).toString()
+            }
+        })
         return view
     }
+
+    
 }

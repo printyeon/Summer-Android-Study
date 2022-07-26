@@ -14,15 +14,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.btn).setOnClickListener{
-            Toast.makeText(this,
-            "Clicked!",
-            Toast.LENGTH_SHORT).show()
+        findViewById<Button>(R.id.btn).setOnClickListener {
+            Toast.makeText(
+                this,
+                "Clicked!",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        findViewById<Button>(R.id.anr).setOnClickListener{
-            for(i in 1..Int.MAX_VALUE){
-                Log.d("mytag", sqrt(Random.nextDouble()).toString())
-            }
+        findViewById<Button>(R.id.anr).setOnClickListener {
+            Thread(Runnable {
+                for (i in 1..Int.MAX_VALUE) {
+                    Log.d("mytag", sqrt(Random.nextDouble()).toString())
+                }
+
+
+            }).start()
         }
     }
 }

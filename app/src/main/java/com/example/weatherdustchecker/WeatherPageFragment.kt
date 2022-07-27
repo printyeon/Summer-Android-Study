@@ -12,7 +12,36 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import java.net.URL
+
+@JsonDeserialize(using = MyDeserializer::class)
+data class OpenWeatherAPIJSONResponse(val temp: Double, val id:Int)
+
+class MyDeserializer : StdDeserializer<OpenWeatherAPIJSONResponse>(
+    OpenWeatherAPIJSONResponse::class.java
+) {
+    override fun deserialize(
+        p: JsonParser?,
+        ctxt: DeserializationContext?
+    ): OpenWeatherAPIJSONResponse {
+        val node = p?.codec?.readTree<JsonNode>(p)
+
+        val weather = node?.get("weather")
+        val firstWeather = weather?.elements()?.next()
+        val id = firstWeather?.get("id")?.asInt()
+        val main = node?.get("main")
+        val temp = main?.get("temp")?.asDouble()
+
+        return OpenWeatherAPIJSONResponse(temp!!, id!!)
+    }
+}
 
 class WeatherPageFragment : Fragment() {
     lateinit var statusText :TextView
@@ -54,6 +83,45 @@ class WeatherPageFragment : Fragment() {
         APICall(object :APICall.APICallback{
             override fun onComplete(result: String) {
                 Log.d("mytag",result)
+                var mapper = jacksonObjectMapper()
+                var data = mapper?.readValue<OpenWeatherAPIJSONResponse>(result)
+
+                temperatureText.text = data.temp.toString()
+
+                var id = data.id.toString()
+                if(id != null) {
+                    statusText.text = when {
+                        id.startsWith("2") -> {
+                            weatherImage.setImageResource(R.drawable.flash)
+                            "천둥, 번개"
+                        }
+                        id.startsWith("3") -> {
+                            weatherImage.setImageResource(R.drawable.rain)
+                            "이슬비"
+                        }
+                        id.startsWith("5") -> {
+                            weatherImage.setImageResource(R.drawable.rain)
+                            "비"
+                        }
+                        id.startsWith("6") -> {
+                            weatherImage.setImageResource(R.drawable.snow)
+                            "눈"
+                        }
+                        id.startsWith("7") -> {
+                            weatherImage.setImageResource(R.drawable.cloudy)
+                            "흐림"
+                        }
+                        id.equals("800") -> {
+                            weatherImage.setImageResource(R.drawable.sun)
+                            "화창"
+                        }
+                        id.startsWith("8") -> {
+                            weatherImage.setImageResource(R.drawable.cloud)
+                            "구름 낌"
+                        }
+                        else -> "알 수 없음"
+                    }
+                }
             }
         }).execute(URL(url))
     }

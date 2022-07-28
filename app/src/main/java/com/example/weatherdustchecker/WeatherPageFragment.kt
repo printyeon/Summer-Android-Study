@@ -82,11 +82,11 @@ class WeatherPageFragment : Fragment() {
 
         APICall(object :APICall.APICallback{
             override fun onComplete(result: String) {
-                Log.d("mytag",result)
+                //Log.d("mytag",result)
                 var mapper = jacksonObjectMapper()
                 var data = mapper?.readValue<OpenWeatherAPIJSONResponse>(result)
 
-                temperatureText.text = data.temp.toString()
+                temperatureText.text = "${data.temp.toString()}ºC"
 
                 var id = data.id.toString()
                 if(id != null) {

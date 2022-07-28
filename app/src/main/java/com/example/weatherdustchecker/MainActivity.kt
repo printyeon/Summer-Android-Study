@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         //newInstance 클래스 메서드 정의해서 status 값(문자열) temperature 값 전달할 수 있도록 해주기
         transaction.add(R.id.fragment_container,
-            WeatherPageFragment.newInstance(37.58, 126.98))
+            DustTextFragment.newInstance(37.58, 126.98))
         transaction.commit()
     }
 }

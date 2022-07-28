@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Mirim/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/dust_page_fragment.xml" value="0.14817629179331307" />
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/dust_test_fragment.xml" value="0.1" />
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/WeatherDustChecker/app/src/main/res/layout/weather_page_fragment.xml" value="0.1" />
       </map>

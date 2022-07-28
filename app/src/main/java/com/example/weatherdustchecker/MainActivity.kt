@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
         //WeatherPageFragment 표시하기 (FrameLayout)
         val transaction = supportFragmentManager.beginTransaction()
 
-        //newInstance 클래스 메서드 정의해서 status 값(문자열) temperature 값 전달할 수 있도록 해주기
+        //newInstance 클래스 메서드 정의해서 status 값(문자열) lat, lon 값 전달할 수 있도록 해주기
         transaction.add(R.id.fragment_container,
-            DustTextFragment.newInstance(37.58, 126.98))
+            DustPageFragment.newInstance(37.58, 126.98))
         transaction.commit()
     }
 }

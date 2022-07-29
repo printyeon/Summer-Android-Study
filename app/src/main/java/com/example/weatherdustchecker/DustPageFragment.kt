@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -15,6 +16,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.gson.GsonBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URL
 
 @JsonDeserialize(using = DustCheckerResponseDeserializer::class)
@@ -84,22 +91,35 @@ class DustPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val lat = arguments?.getDouble("lat")
         val lon = arguments?.getDouble("lon")
-        val url = "https://api.waqi.info/feed/geo:${lat};${lon}/?token=${APP_TOKEN}"
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.waqi.info")
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder().registerTypeAdapter(
+                        DustCheckResponseGSON::class.java,
+                        DustCheckerResponseDeserializerGSON()
+                    ).create()
+                )
+            )
+            .build()
+
+            val apiService = retrofit.create(DustAPIService::class.java)
+            val apiCallForData = apiService.getDustStatusInfo( lat!!, lon!!, APP_TOKEN)
+            apiCallForData.enqueue(object : Callback<DustCheckResponseGSON> {
+                override fun onResponse(
+                    call: Call<DustCheckResponseGSON>,
+                    response: Response<DustCheckResponseGSON>
+                ) {
+
+                    val data = response.body()!!
+                    Log.d("mytag", data.toString())
 
 
-
-        //Log.d("Mytag", url)
-        APICall(object : APICall.APICallback {
-            override fun onComplete(result: String) {
-                //Log.d("Mytag", result)
-
-                val mapper = jacksonObjectMapper()
-                var data = mapper?.readValue<DustCheckResponse>(result)
-
-                statusImage.setImageResource(when(data.pm25Status){
-                    "좋음"->R.drawable.good
-                    "보통"->R.drawable.normal
-                    "나쁜"->R.drawable.bad
+                statusImage.setImageResource (when(data.pm25Status){
+                    "좋음"-> R.drawable.good
+                    "보통"-> R.drawable.normal
+                    "나쁨"-> R.drawable.bad
                     else -> R.drawable.very_bad
                 })
                 pm25IntensityText.text = data.pm25?.toString()
@@ -107,8 +127,43 @@ class DustPageFragment : Fragment() {
 
                 pm25StatusText.text = "${data.pm25Status}(초미세먼지)"
                 pm10StatusText.text = "${data.pm10Status}(미세먼지)"
-            }
-        }).execute(URL(url))
+
+
+
+                }
+                override fun onFailure(call: Call<DustCheckResponseGSON>, t: Throwable) {
+                    Toast.makeText(activity,
+                        "에러발생 : ${t.message}",
+                        Toast.LENGTH_SHORT).show()
+                }
+            })
+
+
+//        val url = "https://api.waqi.info/feed/geo:${lat};${lon}/?token=${APP_TOKEN}"
+//
+//
+//
+//        //Log.d("Mytag", url)
+//        APICall(object : APICall.APICallback {
+//            override fun onComplete(result: String) {
+//                //Log.d("Mytag", result)
+//
+//                val mapper = jacksonObjectMapper()
+//                var data = mapper?.readValue<DustCheckResponse>(result)
+//
+//                statusImage.setImageResource(when(data.pm25Status){
+//                    "좋음"->R.drawable.good
+//                    "보통"->R.drawable.normal
+//                    "나쁜"->R.drawable.bad
+//                    else -> R.drawable.very_bad
+//                })
+//                pm25IntensityText.text = data.pm25?.toString()
+//                pm10IntensityText.text = data.pm10?.toString()
+//
+//                pm25StatusText.text = "${data.pm25Status}(초미세먼지)"
+//                pm10StatusText.text = "${data.pm10Status}(미세먼지)"
+//            }
+//        }).execute(URL(url))
     }
 
     companion object{

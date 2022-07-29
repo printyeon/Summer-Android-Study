@@ -76,67 +76,69 @@ class DustTextFragment :Fragment() {
         val lat = arguments?.getDouble("lat")
         val lon = arguments?.getDouble("lon")
         val url = "https://api.waqi.info/feed/geo:${lat};${lon}/?token=${APP_ID}"
-        APICall(object : APICall.APICallback {
-            override fun onComplete(result: String) {
-                Log.d("mytag", result)
-                var mapper = jacksonObjectMapper()
-                var data = mapper?.readValue<OpenDustAPIJSONResponse>(result)
-
-                //Log.d("mytag", data.pm10.toString())
-                //Log.d("mytag", data.pm25.toString())
 
 
-
-                val pm10 = data.pm10
-                val pm25 = data.pm25
-                dustText.text = pm25.toString()
-                normalDustText.text = pm10.toString()
-
-                if(pm25 != null){
-                    if(pm25 <= 50){
-                        statusText.text = "좋음(초미세먼지)"
-                        dustImage.setImageResource(R.drawable.good)
-
-                    }
-                    else if(pm25 <=150){
-                        statusText.text = "보통(초미세먼지)"
-                        dustImage.setImageResource(R.drawable.normal)
-
-                    }
-                    else if(pm25 <=300){
-                        statusText.text = "나쁨(초미세먼지)"
-                        dustImage.setImageResource(R.drawable.bad)
-
-                    }
-                    else{
-                        statusText.text = "매우나쁨(초미세먼지)"
-                        dustImage.setImageResource(R.drawable.very_bad)
-                    }
-
-                }
-
-                if(pm10 != null){
-                    if(pm10 <= 50){
-                        normalStatusText.text = "좋음(미세먼지)"
-
-                    }
-                    else if(pm10 <=150){
-                        normalStatusText.text = "보통(미세먼지)"
-
-                    }
-                    else if(pm10 <=300){
-                        normalStatusText.text = "나쁨(미세먼지)"
-
-                    }
-                    else{
-                        normalStatusText.text = "매우나쁨(미세먼지)"
-                    }
-
-                }
-
-
-            }
-        }).execute(URL(url))
+//        APICall(object : APICall.APICallback {
+//            override fun onComplete(result: String) {
+//                Log.d("mytag", result)
+//                var mapper = jacksonObjectMapper()
+//                var data = mapper?.readValue<OpenDustAPIJSONResponse>(result)
+//
+//                Log.d("mytag", data.pm10.toString())
+//                Log.d("mytag", data.pm25.toString())
+//
+//
+//
+//                val pm10 = data.pm10
+//                val pm25 = data.pm25
+//                dustText.text = pm25.toString()
+//                normalDustText.text = pm10.toString()
+//
+//                if(pm25 != null){
+//                    if(pm25 <= 50){
+//                        statusText.text = "좋음(초미세먼지)"
+//                        dustImage.setImageResource(R.drawable.good)
+//
+//                    }
+//                    else if(pm25 <=150){
+//                        statusText.text = "보통(초미세먼지)"
+//                        dustImage.setImageResource(R.drawable.normal)
+//
+//                    }
+//                    else if(pm25 <=300){
+//                        statusText.text = "나쁨(초미세먼지)"
+//                        dustImage.setImageResource(R.drawable.bad)
+//
+//                    }
+//                    else{
+//                        statusText.text = "매우나쁨(초미세먼지)"
+//                        dustImage.setImageResource(R.drawable.very_bad)
+//                    }
+//
+//                }
+//
+//                if(pm10 != null){
+//                    if(pm10 <= 50){
+//                        normalStatusText.text = "좋음(미세먼지)"
+//
+//                    }
+//                    else if(pm10 <=150){
+//                        normalStatusText.text = "보통(미세먼지)"
+//
+//                    }
+//                    else if(pm10 <=300){
+//                        normalStatusText.text = "나쁨(미세먼지)"
+//
+//                    }
+//                    else{
+//                        normalStatusText.text = "매우나쁨(미세먼지)"
+//                    }
+//
+//                }
+//
+//
+//            }
+//        }).execute(URL(url))
     }
     companion object{
         fun newInstance(lat:Double, lon:Double):DustTextFragment{

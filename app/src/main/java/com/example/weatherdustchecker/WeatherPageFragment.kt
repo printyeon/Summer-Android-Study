@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -19,6 +16,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URL
 
 @JsonDeserialize(using = MyDeserializer::class)
@@ -32,6 +34,8 @@ class MyDeserializer : StdDeserializer<OpenWeatherAPIJSONResponse>(
         ctxt: DeserializationContext?
     ): OpenWeatherAPIJSONResponse {
         val node = p?.codec?.readTree<JsonNode>(p)
+
+
 
         val weather = node?.get("weather")
         val firstWeather = weather?.elements()?.next()
@@ -78,19 +82,76 @@ class WeatherPageFragment : Fragment() {
 
         val lat = arguments?.getDouble("lat")
         val lon = arguments?.getDouble("lon")
-        var url = "http://api.openweathermap.org/data/2.5/weather?units=metric&appid=${APP_ID}&lat=${lat}&lon=${lon}"
+//        var url = "http://api.openweathermap.org/data/2.5/weather?units=metric&appid=${APP_ID}&lat=${lat}&lon=${lon}"
+//
+//        APICall(object :APICall.APICallback{
+//            override fun onComplete(result: String) {
+//                //Log.d("mytag",result)
+//                var mapper = jacksonObjectMapper()
+//                var data = mapper?.readValue<OpenWeatherAPIJSONResponse>(result)
+//
+//                temperatureText.text = "${data.temp.toString()}ºC"
+//
+//                var id = data.id.toString()
+//                if(id != null) {
+//                    statusText.text = when {
+//                        id.startsWith("2") -> {
+//                            weatherImage.setImageResource(R.drawable.flash)
+//                            "천둥, 번개"
+//                        }
+//                        id.startsWith("3") -> {
+//                            weatherImage.setImageResource(R.drawable.rain)
+//                            "이슬비"
+//                        }
+//                        id.startsWith("5") -> {
+//                            weatherImage.setImageResource(R.drawable.rain)
+//                            "비"
+//                        }
+//                        id.startsWith("6") -> {
+//                            weatherImage.setImageResource(R.drawable.snow)
+//                            "눈"
+//                        }
+//                        id.startsWith("7") -> {
+//                            weatherImage.setImageResource(R.drawable.cloudy)
+//                            "흐림"
+//                        }
+//                        id.equals("800") -> {
+//                            weatherImage.setImageResource(R.drawable.sun)
+//                            "화창"
+//                        }
+//                        id.startsWith("8") -> {
+//                            weatherImage.setImageResource(R.drawable.cloud)
+//                            "구름 낌"
+//                        }
+//                        else -> "알 수 없음"
+//                    }
+//                }
+//            }
+//        }).execute(URL(url))
 
-        APICall(object :APICall.APICallback{
-            override fun onComplete(result: String) {
-                //Log.d("mytag",result)
-                var mapper = jacksonObjectMapper()
-                var data = mapper?.readValue<OpenWeatherAPIJSONResponse>(result)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://api.openweathermap.org")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-                temperatureText.text = "${data.temp.toString()}ºC"
+        val apiService = retrofit.create(WeatherAPIService::class.java)
+        val apiCallForData = apiService.getWeatherStatusInfo(APP_ID, lat!!, lon!!)
+        apiCallForData.enqueue(object :Callback<OpenWeatherAPIJSONResponseGSON>{
+            override fun onResponse(
+                call: Call<OpenWeatherAPIJSONResponseGSON>,
+                response: Response<OpenWeatherAPIJSONResponseGSON>
+            ) {
+                val data = response.body()!!
+                //Log.d("mytag", data.toString())
 
-                var id = data.id.toString()
-                if(id != null) {
-                    statusText.text = when {
+                val temp = data?.main?.get("temp")
+                val id = data?.weather?.get(0)?.get("id")!!
+                //Log.d("mytag", temp.toString())
+                //Log.d("mytag", id.toString())
+
+                temperatureText.text = "${temp.toString()}ºC"
+
+                statusText.text = when {
                         id.startsWith("2") -> {
                             weatherImage.setImageResource(R.drawable.flash)
                             "천둥, 번개"
@@ -122,8 +183,15 @@ class WeatherPageFragment : Fragment() {
                         else -> "알 수 없음"
                     }
                 }
+
+
+            override fun onFailure(call: Call<OpenWeatherAPIJSONResponseGSON>, t: Throwable) {
+                Toast.makeText(activity,
+                "에러발생 : ${t.message}",
+                Toast.LENGTH_SHORT).show()
             }
-        }).execute(URL(url))
+
+        })
     }
 
     //newInstance 만들어서 fragment에서 뭐 할지 만들어주기

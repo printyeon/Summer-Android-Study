@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import retrofit2.Call
@@ -45,29 +46,39 @@ class MainActivity : AppCompatActivity() {
 
 
 
-                var apiCallForData = apiService.getUser(id.toString(), "token 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")
+                var apiCallForData = apiService.getUser(id.toString(), "token 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")
 
                 apiCallForData.enqueue(object : Callback<GitHubUser>{
                     override fun onResponse(
                         call: Call<GitHubUser>,
                         response: Response<GitHubUser>
                     ) {
-                        val data = response.body()!!
-                        Log.d("mytag", data.toString())
+                        val code :String = response.code().toString()
+                        if(code.startsWith("4")) {
+                            //Log.d("mytag", response.code().toString())
+                            Toast.makeText(this@MainActivity, "유저가 없습니다", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            val data = response.body()!!
+                            Log.d("mytag", data.toString())
 
-                        content.text = "login : ${data.login}\n"+
-                                "id : ${data.id}\n"+
-                                "name : ${data.name}\n"+
-                                "followers : ${data.followers}\n"+
-                                "following : ${data.following}\n"
+                            content.text = "login : ${data.login}\n"+
+                                    "id : ${data.id}\n"+
+                                    "name : ${data.name}\n"+
+                                    "followers : ${data.followers}\n"+
+                                    "following : ${data.following}\n"
 
-                        Glide.with(this@MainActivity).load(data.avatar_url).into(pimage)
+                            //this는 object 콜백타입 말하고 있음 근데 바깥에 있는 메인 this 쓸려고 @MainActivity 사용
+                            Glide.with(this@MainActivity)
+                                .load(data.avatarUrl)
+                                .into(pimage)
+                        }
+
 
                     }
 
 
                     override fun onFailure(call: Call<GitHubUser>, t: Throwable) {
-
                     }
 
                 })

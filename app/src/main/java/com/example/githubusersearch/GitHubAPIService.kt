@@ -3,6 +3,7 @@ package com.example.githubusersearch
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -24,7 +25,9 @@ data class GitHubUser(
     val name:String?,
     val followers:Int,
     val following:Int,
-    val avatar_url:String
+
+    @SerializedName("avatar_url") //이름바꿔서 카멜케이스 쓰기 그냥 -근본-
+    val avatarUrl:String
 )
 /*
 class GitHubUserDeserializer : JsonDeserializer<GitHubUser> {

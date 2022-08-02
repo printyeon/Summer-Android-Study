@@ -28,8 +28,8 @@ class GitHubAdapter (val dataList: List<GitHubRepos>)
         val forkCnt = holder.view.findViewById<TextView>(R.id.forkCnt)
 
 
-        resname.text = dataList[position].name
-        resdesc.text = dataList[position].description
+        resname.text = "repositoty name : ${dataList[position].name}"
+        resdesc.text = "repositoty description : ${dataList[position].description}"
         starCnt.text = dataList[position].stargazers_count.toString()
         watchCnt.text = dataList[position].watchers_count.toString()
         forkCnt.text = dataList[position].forks_count.toString()

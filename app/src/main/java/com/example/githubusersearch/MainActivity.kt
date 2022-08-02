@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             val apiService = retrofit.create(GitHubAPIService::class.java)
             findViewById<Button>(R.id.github_search_btn).setOnClickListener{
                 var id = userIdInput.text
-                var apiCallForData = apiService.getUser(id.toString(), "token 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")
+                var apiCallForData = apiService.getUser(id.toString(), "token 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")
 
                 apiCallForData.enqueue(object : Callback<GitHubUser>{
                     override fun onResponse(
@@ -52,25 +53,33 @@ class MainActivity : AppCompatActivity() {
                         response: Response<GitHubUser>
                     ) {
                         val code :String = response.code().toString()
-                        if(code.startsWith("4")) {
-                            Log.d("mytag", response.code().toString())
-                            Toast.makeText(this@MainActivity, "유저가 없습니다", Toast.LENGTH_SHORT).show()
-                        }
-                        else {
-                            val data = response.body()!!
-                            Log.d("mytag", data.toString())
 
-                            content.text = "login : ${data.login}\n"+
-                                    "id : ${data.id}\n"+
-                                    "name : ${data.name}\n"+
-                                    "followers : ${data.followers}\n"+
-                                    "following : ${data.following}\n"
-
-                            //this는 object 콜백타입 말하고 있음 근데 바깥에 있는 메인 this 쓸려고 @MainActivity 사용
-                            Glide.with(this@MainActivity)
-                                .load(data.avatarUrl)
-                                .into(pimage)
+                        if(id.isBlank()){
+                            Toast.makeText(this@MainActivity, "아이디를 입력해 주세요", Toast.LENGTH_SHORT).show()
                         }
+                        else{
+                            if(code.startsWith("4")) {
+                                Log.d("mytag", response.code().toString())
+                                Toast.makeText(this@MainActivity, "유저가 없습니다", Toast.LENGTH_SHORT).show()
+                            }
+                            else {
+                                findViewById<Button>(R.id.github_gitrepos_btn).visibility = View.VISIBLE
+                                val data = response.body()!!
+                                Log.d("mytag", data.toString())
+
+                                content.text = "login : ${data.login}\n"+
+                                        "id : ${data.id}\n"+
+                                        "name : ${data.name}\n"+
+                                        "followers : ${data.followers}\n"+
+                                        "following : ${data.following}\n"
+
+                                //this는 object 콜백타입 말하고 있음 근데 바깥에 있는 메인 this 쓸려고 @MainActivity 사용
+                                Glide.with(this@MainActivity)
+                                    .load(data.avatarUrl)
+                                    .into(pimage)
+                            }
+                        }
+
 
 
                     }

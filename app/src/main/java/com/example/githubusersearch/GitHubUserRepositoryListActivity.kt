@@ -3,6 +3,8 @@ package com.example.githubusersearch
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +21,9 @@ class GitHubUserRepositoryListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_git_hub_user_repository_list)
 
-        val resid = findViewById<TextView>(R.id.resid)
+
+
+        //val resid = findViewById<TextView>(R.id.resid)
         val resname = findViewById<TextView>(R.id.resname)
         val desc =  findViewById<TextView>(R.id.resdesc)
         val starCnt = findViewById<TextView>(R.id.starCnt)
@@ -40,7 +44,7 @@ class GitHubUserRepositoryListActivity : AppCompatActivity() {
         Log.d("myt", id)
         //resid.text = "id : ${id}"
 
-        var apiCallForData = apiService.getRepos(id, "token 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")
+        var apiCallForData = apiService.getRepos(id, "token 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")
 
         apiCallForData.enqueue(object : Callback<List<GitHubRepos>> {
             override fun onResponse(

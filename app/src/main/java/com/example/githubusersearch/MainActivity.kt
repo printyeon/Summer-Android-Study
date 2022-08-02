@@ -1,5 +1,6 @@
 package com.example.githubusersearch
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -43,10 +44,7 @@ class MainActivity : AppCompatActivity() {
             val apiService = retrofit.create(GitHubAPIService::class.java)
             findViewById<Button>(R.id.github_search_btn).setOnClickListener{
                 var id = userIdInput.text
-
-
-
-                var apiCallForData = apiService.getUser(id.toString(), "token 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")
+                var apiCallForData = apiService.getUser(id.toString(), "token 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")
 
                 apiCallForData.enqueue(object : Callback<GitHubUser>{
                     override fun onResponse(
@@ -55,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         val code :String = response.code().toString()
                         if(code.startsWith("4")) {
-                            //Log.d("mytag", response.code().toString())
+                            Log.d("mytag", response.code().toString())
                             Toast.makeText(this@MainActivity, "유저가 없습니다", Toast.LENGTH_SHORT).show()
                         }
                         else {
@@ -87,6 +85,11 @@ class MainActivity : AppCompatActivity() {
 
             //val classInfo : Class<GitHubAPIService> = GitHubAPIService::class.java
 
+            findViewById<Button>(R.id.github_gitrepos_btn).setOnClickListener{
+                val nextIntent = Intent(this, GitHubUserRepositoryListActivity::class.java)
+                nextIntent.putExtra("userid", userIdInput.text.toString())
+                startActivity(nextIntent)
+            }
 
 
 

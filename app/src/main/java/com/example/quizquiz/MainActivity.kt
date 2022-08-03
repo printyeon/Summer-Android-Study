@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         db = QuizDatabase.getInstance(this)
 
         Thread({
+
             for(quiz in db.quizDAO().getAll()){
                 Log.d("myt", quiz.toString())
             }
@@ -67,6 +68,12 @@ class MainActivity : AppCompatActivity() {
                    supportFragmentManager
                        .beginTransaction()
                        .replace(R.id.frame, QuizListFragment()) //추가가 아니라 교체니까 replace
+                       .commit()
+               }
+               R.id.quiz_create -> {
+                   supportFragmentManager
+                       .beginTransaction()
+                       .replace(R.id.frame, QuizCreateFragment()) //추가가 아니라 교체니까 replace
                        .commit()
                }
                }

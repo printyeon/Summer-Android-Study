@@ -5,8 +5,12 @@
       <map>
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/mav_header.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/nav_header.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/quiz_create_fragment.xml" value="0.1859375" />
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/quiz_fragment.xml" value="0.1" />
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/quiz_list_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/quiz_result_fragment.xml" value="0.13632246376811594" />
+        <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/quiz_solve_fragment.xml" value="0.1859375" />
+        <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/layout/quiz_start_fragment.xml" value="0.1859375" />
         <entry key="..\:/Users/Mirim/AndroidStudioProjects/QuizQuiz/app/src/main/res/menu/nav_menu.xml" value="0.36614583333333334" />
       </map>
     </option>
